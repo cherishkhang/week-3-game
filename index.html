@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Cherish Khang - Handman Game </title>
+	<link rel="stylesheet" href="assets/css/reset.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<h1>Hangman</h1>
+
+<div id="weapon"></div>
+<div id="underscores"></div>
+<div id="displayGuessedLetters"></div>
+
+<script>
+/* ------------------------------------------------------------------------
+ * Variables
+ * ------------------------------------------------------------------------ */
+
+//Word List
+var word = [
+	'Mani Katti',
+	'Sol Katti',
+	'Durandal',
+	'Wolf Beil',
+	'Armads',
+	'Forblaze',
+	'Flametongue', 
+	'Sieglinde',
+	'Shamshir',
+	'Reginleif',
+	'Siegmund',
+	'Dragonstone',
+	'Regal Sword',
+	'Ragnell',
+	'Amiti',
+	'Alondite',
+	'Gurgurant',
+	'Rolf\'s Bow',
+	'Onager',
+	'Ettard',
+	'Florete',
+	'Caladbolg',
+	'Tarvos',
+	'Lughnasadh',
+	'Cymbeline',
+	'Thani',
+	'Creiddylad',
+	'Falchion',
+	'Missiletainn',
+	'Amatsu',
+	'Wolf Berg'
+	]
+var randomNumber; //Variable for random number
+var chosenWord = ""; //Variable to pick word using random number
+var underscores = ""; //Variable to display blank underscores
+var allowedLetters = /[a-z]/i; //Only pushes letters to guessedLetters array
+var guessedLetters = []; //Array for user guessedLetters
+var userGuess; //Most current user guess
+
+/* ------------------------------------------------------------------------
+ * Functions
+ * ------------------------------------------------------------------------ */
+
+//Function to start game by picking random number and word
+function startGame() {
+	//Pick random number
+	randomNumber = Math.floor(Math.random()*word.length);
+	//Find word based on random number
+	chosenWord = word[randomNumber];
+
+	//Create blank underscores for chosen word
+	for (var i = 0; i < chosenWord.length; i++) {
+		if (chosenWord.charAt(i) == " ") {
+			underscores = underscores + " \xa0";
+		}
+		else if (chosenWord.charAt(i) == "'") {
+			underscores = underscores + "'";
+		}
+		else {
+			underscores = underscores + "_ ";
+		}
+	}
+	
+	console.log(chosenWord + ": " + underscores);
+
+	document.getElementById('weapon').innerHTML = '<img src="assets/images/weapons/' + randomNumber + '.png" class="weapon">';
+	document.getElementById('underscores').innerHTML = underscores;
+}
+
+//Restarts game by reseting underscore variable and calls startGame()
+function restartGame() {
+	underscores = "";
+	startGame();
+}
+
+//Checks to see if a letter has already been guessed
+function alreadyGuessed() {
+	var checkIfGuessed = guessedLetters.indexOf(userGuess);
+
+	if (checkIfGuessed == -1) {
+		return false;
+	}
+	else return true;
+}
+
+//Takes user guessedLetters out of array and displays letters in all caps with spaces
+function displayGuessedLetters() {
+	var displayLetters = "";
+	for (var i = 0; i < guessedLetters.length; i++) {
+		displayLetters = displayLetters + " " + guessedLetters[i].toUpperCase();
+	}
+	return displayLetters;
+}
+
+/* ------------------------------------------------------------------------
+ * Start Game
+ * ------------------------------------------------------------------------ */
+
+//Initialize game
+startGame();
+
+//When a key is pressed
+document.onkeypress = function(event) {
+	userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+
+	//Checks if key pressed is a letter. If yes, then run code
+	if (userGuess.match(allowedLetters)) {
+		//If first guess, add to guessedLetters array
+		if (guessedLetters.length == 0) {
+			guessedLetters.push(userGuess);
+		}
+		//If not first guess, see if already in array. If not, add to array.
+		else {
+			alreadyGuessed();
+			if (alreadyGuessed() == false) {
+				guessedLetters.push(userGuess);
+			}
+		}
+	}
+
+	document.getElementById('displayGuessedLetters').innerHTML = displayGuessedLetters();
+}
+
+</script>
+
+<button onclick="restartGame()">Reset Game</button>
+
+</body>
+</html>
