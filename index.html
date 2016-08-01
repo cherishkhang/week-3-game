@@ -54,7 +54,8 @@ var word = [
 	]
 var randomNumber; //Variable for random number
 var chosenWord = ""; //Variable to pick word using random number
-var underscores = ""; //Variable to display blank underscores
+var underscores = []; //Array to display blank underscores
+var displayUnderscores = ""; //Nice display of contents from underscores array with spaces and without commas
 var allowedLetters = /[a-z]/i; //Only pushes letters to guessedLetters array
 var guessedLetters = []; //Array for user guessedLetters
 var userGuess; //Most current user guess
@@ -63,36 +64,46 @@ var userGuess; //Most current user guess
  * Functions
  * ------------------------------------------------------------------------ */
 
-//Function to start game by picking random number and word
-function startGame() {
+//Function to start game
+function pickWord() {
 	//Pick random number
 	randomNumber = Math.floor(Math.random()*word.length);
 	//Find word based on random number
 	chosenWord = word[randomNumber];
 
-	//Create blank underscores for chosen word
+	//Create array for blank underscores based on chosen word
 	for (var i = 0; i < chosenWord.length; i++) {
 		if (chosenWord.charAt(i) == " ") {
-			underscores = underscores + " \xa0";
+			underscores.push("\xa0");
 		}
 		else if (chosenWord.charAt(i) == "'") {
-			underscores = underscores + "'";
+			underscores.push("'");
 		}
 		else {
-			underscores = underscores + "_ ";
+			underscores.push("_");
 		}
 	}
-	
-	console.log(chosenWord + ": " + underscores);
-
-	document.getElementById('weapon').innerHTML = '<img src="assets/images/weapons/' + randomNumber + '.png" class="weapon">';
-	document.getElementById('underscores').innerHTML = underscores;
 }
 
-//Restarts game by reseting underscore variable and calls startGame()
-function restartGame() {
-	underscores = "";
-	startGame();
+//Create nice display for contents in underscores array
+function createDisplayUnderscores() {
+	displayUnderscores = "";
+	for (var i = 0; i < underscores.length; i++) {
+		if (chosenWord.charAt(i) == " " || chosenWord.charAt(i) == "'") {
+			displayUnderscores = displayUnderscores + underscores[i];
+		}
+		else {
+			displayUnderscores = displayUnderscores + " " + underscores[i];
+		}
+	}
+	document.getElementById('underscores').innerHTML = displayUnderscores;
+}
+
+//Show correct image and blank underscores for chosen word
+function showImageAndUnderscores() {
+	document.getElementById('weapon').innerHTML = '<img src="assets/images/weapons/' + randomNumber + '.png" class="weapon">';
+	document.getElementById('underscores').innerHTML = displayUnderscores;
+	console.log(chosenWord + ": " + displayUnderscores);
 }
 
 //Checks to see if a letter has already been guessed
@@ -114,12 +125,25 @@ function displayGuessedLetters() {
 	return displayLetters;
 }
 
+function game() {
+	pickWord();
+	createDisplayUnderscores();
+	showImageAndUnderscores();
+}
+
+//Restarts game by reseting underscore variable and calls startGame()
+function restartGame() {
+	underscores = [];
+	displayUnderscores = "";
+	game();
+}
+
 /* ------------------------------------------------------------------------
  * Start Game
  * ------------------------------------------------------------------------ */
 
 //Initialize game
-startGame();
+game();
 
 //When a key is pressed
 document.onkeypress = function(event) {
@@ -127,20 +151,28 @@ document.onkeypress = function(event) {
 
 	//Checks if key pressed is a letter. If yes, then run code
 	if (userGuess.match(allowedLetters)) {
-		//If first guess, add to guessedLetters array
-		if (guessedLetters.length == 0) {
-			guessedLetters.push(userGuess);
-		}
-		//If not first guess, see if already in array. If not, add to array.
-		else {
-			alreadyGuessed();
-			if (alreadyGuessed() == false) {
-				guessedLetters.push(userGuess);
+		for (var i = 0; i < chosenWord.length; i++) {
+			if (userGuess == chosenWord.charAt(i)) {
+				underscores.splice(i,1,userGuess);
+				createDisplayUnderscores();
+				console.log(chosenWord + ": " + displayUnderscores);
 			}
 		}
+		// //If first guess, add to guessedLetters array
+		// if (guessedLetters.length == 0) {
+		// 	guessedLetters.push(userGuess);
+		// }
+		// //If not first guess, see if already in array. If not, add to array.
+		// else {
+		// 	alreadyGuessed();
+		// 	if (alreadyGuessed() == false) {
+		// 		guessedLetters.push(userGuess);
+		// 	}
+		// }
 	}
 
 	document.getElementById('displayGuessedLetters').innerHTML = displayGuessedLetters();
+
 }
 
 </script>
