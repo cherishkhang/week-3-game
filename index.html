@@ -9,9 +9,12 @@
 
 <h1>Hangman</h1>
 
+<div id="message"></div>
+<div id="wins">Wins: 0</div>
 <div id="weapon"></div>
 <div id="underscores"></div>
 <div id="displayGuessedLetters"></div>
+<div id="guesses">Guesses: 10</div>
 
 <script>
 /* ------------------------------------------------------------------------
@@ -55,10 +58,12 @@ var word = [
 var randomNumber; //Variable for random number
 var chosenWord = ""; //Variable to pick word using random number
 var underscores = []; //Array to display blank underscores
-var displayUnderscores = ""; //Nice display of contents from underscores array with spaces and without commas
-var allowedLetters = /[a-z]/i; //Only pushes letters to guessedLetters array
+var displayUnderscores = ""; //Display contents of underscores array nicely with spaces and without commas
+var allowedLetters = /[A-Z]/i; //Only pushes letters to guessedLetters array
 var guessedLetters = []; //Array for user guessedLetters
 var userGuess; //Most current user guess
+var guessesLeft = 10; //Number of guesses left
+var wins = 0; //Number of wins
 
 /* ------------------------------------------------------------------------
  * Functions
@@ -99,23 +104,6 @@ function createDisplayUnderscores() {
 	document.getElementById('underscores').innerHTML = displayUnderscores;
 }
 
-//Show correct image and blank underscores for chosen word
-function showImageAndUnderscores() {
-	document.getElementById('weapon').innerHTML = '<img src="assets/images/weapons/' + randomNumber + '.png" class="weapon">';
-	document.getElementById('underscores').innerHTML = displayUnderscores;
-	console.log(chosenWord + ": " + displayUnderscores);
-}
-
-//Checks to see if a letter has already been guessed
-function alreadyGuessed() {
-	var checkIfGuessed = guessedLetters.indexOf(userGuess);
-
-	if (checkIfGuessed == -1) {
-		return false;
-	}
-	else return true;
-}
-
 //Takes user guessedLetters out of array and displays letters in all caps with spaces
 function displayGuessedLetters() {
 	var displayLetters = "";
@@ -125,21 +113,41 @@ function displayGuessedLetters() {
 	return displayLetters;
 }
 
+//Show correct image and blank underscores for chosen word
+function showImageAndUnderscores() {
+	document.getElementById('weapon').innerHTML = '<img src="assets/images/weapons/' + randomNumber + '.png" class="weapon">';
+	document.getElementById('underscores').innerHTML = displayUnderscores;
+	console.log(chosenWord + ": " + displayUnderscores);
+}
+
+//Show array of guessed letters
+function showGuessedLetters() {
+	document.getElementById('displayGuessedLetters').innerHTML = displayGuessedLetters();
+}
+
+//Function to begin game
 function game() {
 	pickWord();
 	createDisplayUnderscores();
 	showImageAndUnderscores();
 }
 
-//Restarts game by reseting underscore variable and calls startGame()
+//Restarts game by reseting variables and calls game()
 function restartGame() {
 	underscores = [];
 	displayUnderscores = "";
+	guessedLetters = [];
+	guessesLeft = 10;
+	document.getElementById('guesses').innerHTML = "Guesses: " + guessesLeft;
+	showGuessedLetters();
 	game();
 }
 
 /* ------------------------------------------------------------------------
  * Start Game
+ *
+ * For easy guessing, the word and correct guesses are logged into the
+ * console
  * ------------------------------------------------------------------------ */
 
 //Initialize game
@@ -149,29 +157,63 @@ game();
 document.onkeypress = function(event) {
 	userGuess = String.fromCharCode(event.keyCode).toLowerCase();
 
-	//Checks if key pressed is a letter. If yes, then run code
+	//Checks if key pressed is a letter
 	if (userGuess.match(allowedLetters)) {
-		for (var i = 0; i < chosenWord.length; i++) {
-			if (userGuess == chosenWord.charAt(i)) {
-				underscores.splice(i,1,userGuess);
-				createDisplayUnderscores();
-				console.log(chosenWord + ": " + displayUnderscores);
+		//If current userGuess isn't found in the word, push to the guessedLetters array
+		if (chosenWord.toLowerCase().indexOf(userGuess) == -1) {
+			//If first guess, add to guessedLetters array
+			if (guessedLetters.length == 0) {
+				guessedLetters.push(userGuess);
+				guessesLeft--;
+			}
+			//If not first guess, see if already in array. If not, add to array.
+			else {
+				if (guessedLetters.indexOf(userGuess) == -1) {
+					guessedLetters.push(userGuess);
+					guessesLeft--;
+				}
+			}
+
+			//Update number of guesses left
+			document.getElementById('guesses').innerHTML = "Guesses: " + guessesLeft;
+		}
+		//If current userGuess is found in the word, do the following
+		else {
+			for (var i = 0; i < chosenWord.length; i++) {
+				//Check if the letter at 'i' is uppercase
+				if (chosenWord.charAt(i) >= "A" && chosenWord.charAt(i) <= "Z") {
+					//If lowercase userGuess matches lowercase letter at 'i,' push to underscores array
+					if (userGuess == chosenWord.charAt(i).toLowerCase()) {
+						underscores.splice(i,1,userGuess.toUpperCase());
+						createDisplayUnderscores();
+						console.log(chosenWord + ": " + displayUnderscores);
+					}
+				}
+				//Else if letter at 'i' isn't capitalized, see if it matches the current userGuess
+				else if (userGuess == chosenWord.charAt(i)) {
+					underscores.splice(i,1,userGuess);
+					createDisplayUnderscores();
+					console.log(chosenWord + ": " + displayUnderscores);
+				}
+
+				//Check to see if the entire word has been guessed
+				if (underscores.indexOf("_") == -1) {
+					wins++;
+					document.getElementById('message').innerHTML = "You solved it! The word was " + chosenWord + ".";
+					document.getElementById('wins').innerHTML = "Wins: " + wins;
+					restartGame();
+				}
 			}
 		}
-		// //If first guess, add to guessedLetters array
-		// if (guessedLetters.length == 0) {
-		// 	guessedLetters.push(userGuess);
-		// }
-		// //If not first guess, see if already in array. If not, add to array.
-		// else {
-		// 	alreadyGuessed();
-		// 	if (alreadyGuessed() == false) {
-		// 		guessedLetters.push(userGuess);
-		// 	}
-		// }
 	}
 
-	document.getElementById('displayGuessedLetters').innerHTML = displayGuessedLetters();
+	showGuessedLetters();
+
+	//If there are no more guesses, end game
+	if (guessesLeft == 0) {
+		document.getElementById('message').innerHTML = "You lose! The word was " + chosenWord + ".";
+		restartGame();
+	}
 
 }
 
