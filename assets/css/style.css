@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'FE Font';
+    src: url('../images/fonts/fefont.ttf');
+}
+
+body {
+	font-family: 'FE Font';
+	font-size: 24px;
+	letter-spacing: 2px;
+}
