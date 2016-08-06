@@ -2,25 +2,37 @@
 <html>
 <head lang="en">
 	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title> Cherish Khang - Handman Game </title>
+	<title> Fire Emblem Hangman Game </title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="http://csshake.surge.sh/csshake.min.css">
+ 	<link rel="stylesheet" href="assets/css/animate.css">
 	<link rel="stylesheet" href="assets/css/reset.css">
 	<link rel="stylesheet" href="assets/css/style.css">
 	<script src="assets/javascript/game.js"></script>
 </head>
 <body>
 
-<h1 class="shake-little">Hangman</h1>
 
-<div id="message"></div>
-<div id="wins">Wins: 0</div>
-<div id="weapon"></div>
-<div id="word-guesses"></div>
-<div id="display-guessed-letters"></div>
-<div id="guesses">Guesses: 10</div>
-<button id="restart-game">Restart Game</button>
+
+<div class="container game-area">
+	<div class="row">
+		<div class="col-xs-12 col-md-6">
+			<div id="text-area">
+				<div id="message" class="bubble">Welcome to <span class="title">Fire Emblem Hangman</span>! Guess the item!</div>
+				<div class="lyn"><img id="lyn-img" src="assets/images/text/lyn-welcome.gif"></div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-6">
+			<div id="stats-area">
+				<div id="wins">Wins: 0</div>
+				<div id="weapon"></div>
+				<div id="word-guesses"></div>
+				<div id="guesses">Guesses: 10</div>
+				<div id="display-guessed-letters">&nbsp;</div>
+				<button id="restart-game">Restart Game</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 </body>

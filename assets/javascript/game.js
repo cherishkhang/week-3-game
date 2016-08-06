@@ -69,8 +69,7 @@ var word = [
 	'Wo Dao',
 	'Wolf Beil',
 	'Wolf Berg'
-	]
-var randomNumber; //Variable for random number
+	];
 var chosenWord = ""; //Variable to pick word using random number
 var wordGuesses = []; //Array to display blank underscores and correct user inputs
 var displayWordGuesses = ""; //Display contents of wordGuesses array nicely with spaces and without commas
@@ -128,14 +127,22 @@ function displayGuessedLetters() {
 
 //Show correct image and blank underscores for chosen word
 function showImageAndWordGuesses() {
-	document.getElementById('weapon').innerHTML = '<img src="assets/images/items/' + chosenWord.replace(/'| /g,'').toLowerCase() + '.png">';
+	document.getElementById('weapon').innerHTML = '<img class="weapon-img" src="assets/images/items/' + chosenWord.replace(/'| /g,'').toLowerCase() + '.png">';
 	document.getElementById('word-guesses').innerHTML = displayWordGuesses;
 	console.log(chosenWord + ": " + displayWordGuesses);
 }
 
-//Show array of guessed letters
+//Show array of guessed letters. If there are no guessed letters yet, display a single space.
 function showGuessedLetters() {
-	document.getElementById('display-guessed-letters').innerHTML = displayGuessedLetters();
+	if (displayGuessedLetters() === "") {
+		document.getElementById('display-guessed-letters').innerHTML = "\xa0";
+	}
+	else document.getElementById('display-guessed-letters').innerHTML = displayGuessedLetters();
+}
+
+//Reset win/lose animation of speech bubble
+function resetAnimationMessage() {
+	document.getElementById('message').className= "bubble";
 }
 
 //Function to begin game
@@ -153,7 +160,26 @@ function restartGame() {
 	guessesLeft = 10;
 	document.getElementById('guesses').innerHTML = "Guesses: " + guessesLeft;
 	showGuessedLetters();
+	setTimeout(resetAnimationMessage, 3000);
 	game();
+}
+
+//Items to run when game is won
+function win() {
+	wins++;
+	document.getElementById('message').innerHTML = 'You solved it! The word was <span class="word-win">' + chosenWord + '</span>.';
+	document.getElementById('lyn-img').src = 'assets/images/text/lyn-win.gif';
+	document.getElementById('wins').innerHTML = 'Wins: ' + wins;
+	document.getElementById('message').className= 'bubble animated pulse';
+	restartGame();
+}
+
+//Items to run when game is lost
+function lose() {
+	document.getElementById('message').innerHTML = 'You lost! The word was <span class="word-lose">' + chosenWord + '</span>.';
+	document.getElementById('lyn-img').src = 'assets/images/text/lyn-lose.gif';
+	document.getElementById('message').className= 'bubble animated pulse';
+	restartGame();
 }
 
 //What happens when user presses a letter key
@@ -167,8 +193,8 @@ function letterPress() {
 		//If current userGuess isn't found in the word, push to the guessedLetters array
 		if (chosenWord.toLowerCase().indexOf(userGuess) == -1) {
 
-			//If first guess, add to guessedLetters array and decrease number of guesses left
-			if (guessedLetters.length == 0) {
+			//If first guess, add to guessedLetters array and decrease number of guesses left. Also reset animation.
+			if (guessedLetters.length === 0) {
 				guessedLetters.push(userGuess);
 				guessesLeft--;
 			}
@@ -192,7 +218,7 @@ function letterPress() {
 				//Check if the letter at 'i' is uppercase
 				if (chosenWord.charAt(i) >= "A" && chosenWord.charAt(i) <= "Z") {
 
-					//If lowercase userGuess matches lowercase letter at 'i,' push to wordGuesses array
+					//If lowercase userGuess matches lowercase letter at 'i,' push to wordGuesses array. Also reset animation.
 					if (userGuess == chosenWord.charAt(i).toLowerCase()) {
 						wordGuesses.splice(i,1,userGuess.toUpperCase());
 						createWordGuesses();
@@ -210,10 +236,7 @@ function letterPress() {
 
 				//Check to see if the entire word has been guessed yet
 				if (wordGuesses.indexOf("_") == -1) {
-					wins++;
-					document.getElementById('message').innerHTML = 'You solved it! The word was <span class="word">' + chosenWord + '</span>.';
-					document.getElementById('wins').innerHTML = "Wins: " + wins;
-					restartGame();
+					win();
 				}
 			}
 		}
@@ -222,9 +245,8 @@ function letterPress() {
 	showGuessedLetters();
 
 	//If there are no more guesses, end game
-	if (guessesLeft == 0) {
-		document.getElementById('message').innerHTML = 'You lost! The word was <span class="word">' + chosenWord + '</span>.';
-		restartGame();
+	if (guessesLeft === 0) {
+		lose();
 	}
 }
 
@@ -242,10 +264,8 @@ window.onload = function() {
 	//When a key is pressed
 	document.onkeypress = function(event) {
 		letterPress();
-	}
-
-	document.getElementById('restart-game').onclick = function() {
-		restartGame();
 	};
 
-}
+	document.getElementById('restart-game').onclick = restartGame();
+
+};

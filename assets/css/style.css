@@ -5,10 +5,121 @@
 
 body {
 	font-family: 'FE Font';
-	font-size: 24px;
-	letter-spacing: 2px;
+	font-size: 20px;
+	letter-spacing: 1px;
+	margin: 75px;
+	background: url('../images/background.jpg');
 }
 
-.word {
+img {
+	image-rendering: pixelated;
+}
+
+.word-win {
+	color: blue;
+}
+
+.word-lose {
 	color: red;
+}
+
+.title {
+	color: green;
+}
+
+button {
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+/* ------------------------------------------------------------------------------------------------
+ * Header Image
+ * ------------------------------------------------------------------------------------------------ */
+
+#text-area {
+	background: url('../images/text/background.png') no-repeat;
+	background-size: cover;
+	height: 320px;
+	width: 480px;
+	overflow: hidden;
+	margin: 0 auto;
+	border: 2px solid black;
+	border-radius: 10px;
+	font-size: 26px;
+	margin-bottom: 30px;
+}
+
+.lyn {
+	padding-left: 20px;
+}
+
+img#lyn-img {
+	width: 160px;
+	height: 152px;
+}
+
+.bubble {
+	position: relative;
+	width: 320px;
+	height: 70px;
+	padding: 10px;
+    margin: 80px 40px 14px 40px;
+	background: #FFFFFF;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	border: #453b59 solid 2px;
+}
+
+.bubble:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 15px 10px 0;
+	border-color: #FFFFFF transparent;
+	display: block;
+	width: 0;
+	z-index: 1;
+	margin-left: -10px;
+	bottom: -15px;
+	left: 28%;
+}
+
+.bubble:before {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 16px 11px 0;
+	border-color: #453b59 transparent;
+	display: block;
+	width: 0;
+	z-index: 0;
+	margin-left: -11px;
+	bottom: -18px;
+	left: 28%;
+}
+
+/* ------------------------------------------------------------------------------------------------
+ * Game Area
+ * ------------------------------------------------------------------------------------------------ */
+
+.container {
+	width: 80%;
+	text-align: center;
+}
+
+#text-area {
+	text-align: left;
+}
+
+#stats-area {
+	padding: 10px;
+	background: #dccdbf;
+	border-radius: 10px;
+}
+
+.weapon-img {
+	width: 190px;
+	height: 190px;
+	margin: 10px;
 }
