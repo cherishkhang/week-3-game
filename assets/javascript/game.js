@@ -266,6 +266,8 @@ window.onload = function() {
 		letterPress();
 	};
 
-	document.getElementById('restart-game').onclick = restartGame();
+	document.getElementById('restart-game').onclick = function() {
+		restartGame();
+	};
 
 };
