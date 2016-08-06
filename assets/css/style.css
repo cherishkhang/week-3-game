@@ -63,7 +63,7 @@ img#lyn-img {
 	width: 380px;
 	height: 70px;
 	padding: 10px;
-    margin: 80px 0 14px 40px;
+    margin: 70px 0 24px 40px;
 	background: #FFFFFF;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -82,7 +82,7 @@ img#lyn-img {
 	z-index: 1;
 	margin-left: -10px;
 	bottom: -15px;
-	left: 28%;
+	left: 23%;
 }
 
 .bubble:before {
@@ -96,7 +96,7 @@ img#lyn-img {
 	z-index: 0;
 	margin-left: -11px;
 	bottom: -18px;
-	left: 28%;
+	left: 23%;
 }
 
 /* ------------------------------------------------------------------------------------------------
