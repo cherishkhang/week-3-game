@@ -7,7 +7,7 @@ body {
 	font-family: 'FE Font';
 	font-size: 20px;
 	letter-spacing: 1px;
-	margin: 75px;
+	margin: 75px 20px;
 	background: url('../images/background.jpg');
 }
 
@@ -104,7 +104,6 @@ img#lyn-img {
  * ------------------------------------------------------------------------------------------------ */
 
 .container {
-	width: 80%;
 	text-align: center;
 }
 
