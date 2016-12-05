@@ -17,7 +17,7 @@ There are a total of 65 possible words to play. Wins are counted and displayed a
 * JavaScript
 
 # Credits
-* Sprites and images are &copy; Intelligent Systems
+* Sprites and images &copy; Intelligent Systems
 
 # Licenses
 None
