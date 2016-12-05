@@ -11,9 +11,10 @@ There are a total of 65 possible words to play. Wins are counted and displayed a
 # Technologies Used
 * HTML
 * CSS
-* Bootstrap
+  * Bootstrap
+  * Reset CSS
+  * [Animate.css](https://daneden.github.io/animate.css)
 * JavaScript
-* [Animate.css](https://daneden.github.io/animate.css)
 
 # Credits
 * Sprites and images are &copy; Intelligent Systems
